@@ -1,36 +1,46 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import SettingPage from './pages/setting'
-import LoginPage from './pages/login/index'
-import Navbar from './components/navBar'
+import DashboardPage from "./pages/dashboard/index";
+import SettingPage from "./pages/setting";
+import LoginPage from "./pages/login/index";
+import Navbar from "./components/navBar";
 
 import { ThemeContextProvider } from "./context/themeContext";
-import RedirectAuthorized from "./components/auth/redirect-authorized"
-import AuthRequired from "./components/auth/auth-required"
+import RedirectAuthorized from "./components/auth/redirect-authorized";
+import AuthRequired from "./components/auth/auth-required";
 
 import AppProvider from "./AppProvider";
 
-import Toaster from './components/base/toaster';
+import Toaster from "./components/base/toaster";
 
 function App() {
-
   const router = createBrowserRouter([
-   
+    {
+      path: "/dashboard",
+      element: (
+        <AuthRequired redirect="/">
+          <DashboardPage />
+          <Navbar />
+        </AuthRequired>
+      ),
+    },
     {
       path: "/setting",
-      element:
-        <AuthRequired redirect="/login">
+      element: (
+        <AuthRequired redirect="/">
           <SettingPage />
           <Navbar />
         </AuthRequired>
+      ),
     },
     {
-      path: "/login",
-      element: <RedirectAuthorized redirect="/dashboard"><LoginPage /></RedirectAuthorized>
-    }
+      path: "/",
+      element: (
+        <RedirectAuthorized redirect="/dashboard">
+          <LoginPage />
+        </RedirectAuthorized>
+      ),
+    },
   ]);
 
   return (
